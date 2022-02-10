@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const appTitle = 'Isolate Demo';
+    const appTitle = "Lance's Angels";
 
     return const MaterialApp(
       title: appTitle,
@@ -33,9 +33,6 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title:Text("ListView.builder")
-      ),
       body: ListView.builder(
           itemCount: transactions.length,
           itemBuilder: (BuildContext context,int index){
