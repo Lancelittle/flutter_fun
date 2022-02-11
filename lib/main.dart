@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-
+import 'package:mx_flutter/sign_in.dart';
 
 void main() => runApp(const MyApp());
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 
     return const MaterialApp(
       title: appTitle,
-      home: MyTransactions(title: appTitle),
+      home: SignInWidget(),
     );
   }
 }
