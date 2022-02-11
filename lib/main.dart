@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mx_flutter/sign_in.dart';
+import 'package:mx_flutter/summary.dart';
+import 'package:mx_flutter/transactions.dart';
 
 void main() => runApp(const MyApp());
 
@@ -20,57 +22,26 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// class TransactionList extends StatelessWidget {
-//   const TransactionList({Key? key, required this.transactions}) : super(key: key);
-//
-//   final List<Transaction> transactions;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: ListView.builder(
-//           itemCount: transactions.length,
-//           itemBuilder: (BuildContext context,int index){
-//             return ListTile(
-//                 leading: Icon(Icons.list),
-//                 trailing: Text(transactions[index].description,
-//                   style: TextStyle(
-//                       color: Colors.green,fontSize: 15),),
-//                 title:Text("\$${currencyFormatter.format(transactions[index].amount)}")
-//             );
-//           }
-//       ),
-//     );
-//   }
-// }
+class TransactionList extends StatelessWidget {
+  const TransactionList({Key? key, required this.transactions, required this.summary}) : super(key: key);
 
-// class MyTransactions extends StatelessWidget {
-//   const MyTransactions({Key? key, required this.title}) : super(key: key);
-//
-//   final String title;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(title),
-//       ),
-//       body: FutureBuilder<List<Transaction>>(
-//         future: fetchTransactions(http.Client()),
-//         builder: (context, snapshot) {
-//           if (snapshot.hasError) {
-//             return const Center(
-//               child: Text('An error has occurred!'),
-//             );
-//           } else if (snapshot.hasData) {
-//             return TransactionList(transactions: snapshot.data!);
-//           } else {
-//             return const Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
+  final List<Transaction> transactions;
+  final Summary summary;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.builder(
+          itemCount: transactions.length,
+          itemBuilder: (BuildContext context,int index){
+            return ListTile(
+                leading: Icon(Icons.list),
+                title: Text(transactions[index].description,),
+                trailing:Text("\$${currencyFormatter.format(transactions[index].amount)}",
+                    style: TextStyle(color: (transactions[index].type == "DEBIT") ? Colors.red : Colors.green,fontSize: 15),)
+            );
+          }
+      ),
+    );
+  }
+}

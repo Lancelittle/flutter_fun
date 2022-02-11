@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:mx_flutter/summary.dart';
 import 'package:mx_flutter/transactions.dart';
 import 'package:mx_flutter/user.dart';
 
@@ -19,22 +20,27 @@ class _SignInWidgetState extends State<SignInWidget> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   bool _signingIn = false;
+  bool _polling = false;
 
   void _submit() {
     _loading(true);
+    _polling = true;
 
     createUser(emailController.text, firstNameController.text,
             lastNameController.text)
         .then((user) {
       Timer.periodic(const Duration(milliseconds: 1000), (Timer timer) async {
-        if (timer.tick > 10) {
+        if (timer.tick > 15) {
           timer.cancel();
           _loading(false);
         } else {
           fetchTransactions(user.guid, user.memberGuid).then((transactions) {
-            if(transactions.length > 1) {
-              timer.cancel();
-              _userCreated();
+            if(transactions.length > 1 && _polling) {
+              fetchSummary(user.guid, user.memberGuid).then((summary) {
+                _polling = false;
+                timer.cancel();
+                _userCreated(transactions, summary);
+              });
             }
           });
         }
@@ -42,12 +48,12 @@ class _SignInWidgetState extends State<SignInWidget> {
     });
   }
 
-  void _userCreated() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //       builder: (context) => const MyTransactions(title: "hello")),
-    // );
+  void _userCreated(List<Transaction> transactions, Summary summary) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => TransactionList(transactions: transactions, summary: summary)),
+    );
     _loading(false);
   }
 
