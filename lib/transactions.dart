@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-Future<List<Transaction>> getTransactions() async {
-  final response = await http.get(Uri.parse('https://houndstooth-mx.herokuapp.com/users/My-Unique-ID/transactions'));
-  if (response.statusCode == 201) {
+Future<List<Transaction>> fetchTransactions(String userGuid, String memberGuid) async {
+  final response = await http.get(Uri.parse('https://houndstooth-mx.herokuapp.com/users/$userGuid/transactions?member_guid=$memberGuid'));
+  if (response.statusCode == 200) {
     return compute(parseTransactions, response.body);
   } else {
     throw Exception('Failed to fetch transactions');

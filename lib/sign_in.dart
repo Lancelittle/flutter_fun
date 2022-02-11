@@ -31,7 +31,7 @@ class _SignInWidgetState extends State<SignInWidget> {
           timer.cancel();
           _loading(false);
         } else {
-          getTransactions().then((transactions) {
+          fetchTransactions(user.guid, user.memberGuid).then((transactions) {
             timer.cancel();
             _userCreated();
           });
@@ -41,11 +41,11 @@ class _SignInWidgetState extends State<SignInWidget> {
   }
 
   void _userCreated() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => const MyTransactions(title: "hello")),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //       builder: (context) => const MyTransactions(title: "hello")),
+    // );
     _loading(false);
   }
 
