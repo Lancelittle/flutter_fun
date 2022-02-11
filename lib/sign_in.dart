@@ -32,8 +32,10 @@ class _SignInWidgetState extends State<SignInWidget> {
           _loading(false);
         } else {
           fetchTransactions(user.guid, user.memberGuid).then((transactions) {
-            timer.cancel();
-            _userCreated();
+            if(transactions.length > 1) {
+              timer.cancel();
+              _userCreated();
+            }
           });
         }
       });
