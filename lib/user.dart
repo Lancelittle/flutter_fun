@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 
@@ -8,12 +9,9 @@ Future<User> createUser(String email, String firstName, String lastName) async {
     Uri.parse('https://houndstooth-mx.herokuapp.com/users'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json'
     },
-    body: jsonEncode(<String, String>{
-      'email': email,
-      'first_name': firstName,
-      'last_name': lastName
-    }),
+    body: jsonEncode(UserPost(UserInfo(email, firstName, lastName)).toJson()),
   );
 
   if (response.statusCode == 201) {
@@ -26,6 +24,39 @@ Future<User> createUser(String email, String firstName, String lastName) async {
     throw Exception('Failed to create album.');
   }
 }
+
+class UserPost {
+  UserInfo user;
+
+  UserPost(this.user);
+
+  Map toJson() {
+    Map userJson = user.toJson();
+    return {
+      'user': userJson
+    };
+  }
+}
+
+class UserInfo{
+  String email;
+  String firstName;
+  String lastName;
+
+  UserInfo(this.email, this.firstName, this.lastName);
+
+  Map toJson() {
+    var rng = Random();
+    return {
+      'email': email,
+      'first_name': firstName,
+      'last_name': lastName,
+      'is_disabled': false,
+      'id': rng.nextInt(100000)
+    };
+  }
+}
+
 
 class User{
   final String guid;
